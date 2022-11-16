@@ -147,11 +147,13 @@ const verifyOTP = async (req, res, next) => {
       value = user;
     });
 
-    if (value.et === code) {
-      return res.status(200).json({ success: true, msg: "verification okay" });
-    } else {
-      next(handleError(500, "incorrect token"));
-    }
+    res.send(value);
+
+    // if (value.et === code) {
+    //   return res.status(200).json({ success: true, msg: "verification okay" });
+    // } else {
+    //   next(handleError(500, "incorrect token"));
+    // }
   } catch (error) {
     next(error);
   }
