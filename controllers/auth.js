@@ -59,8 +59,6 @@ const sendOTP = async (req, res, next) => {
       return res.send("user already exist");
     }
 
-    const user = new User(req.body);
-
     //   const mailOptions = {
     //     from: "leapsailafrica@gmail.com",
     //     to: user.email,
