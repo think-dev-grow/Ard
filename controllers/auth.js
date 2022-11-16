@@ -105,9 +105,9 @@ const verifyOTP = async (req, res, next) => {
     console.log(code, req.user.et);
 
     if (req.user.et === code) {
-      return res.status(200).json("pin correct");
+      res.status(200).json("pin correct");
     } else {
-      return next(handleError(404, "Wrong Token"));
+      next(handleError(404, "Wrong Token"));
     }
   } catch (error) {
     next(error);
