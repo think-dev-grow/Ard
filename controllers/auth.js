@@ -34,7 +34,21 @@ const sendOTP = async (req, res, next) => {
     const check = await User.findOne({ email: req.body.email });
 
     if (!check) {
-      return res.send("user created.");
+      const user = new User(req.body);
+      let value = randomize("0", 7);
+
+      const data = await user.save();
+
+      const payload = {
+        id: data._id,
+        et: value,
+      };
+
+      const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
+
+      const { email, _id } = data._doc;
+
+      res.status(200).json({ id: _id, email, token });
     }
 
     if (check) {
@@ -45,17 +59,7 @@ const sendOTP = async (req, res, next) => {
       return res.send("user already exist");
     }
 
-    //   const user = new User(req.body);
-    //   let value = randomize("0", 7);
-
-    //   const data = await user.save();
-
-    //   const payload = {
-    //     id: data._id,
-    //     et: value,
-    //   };
-
-    //   const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
+    const user = new User(req.body);
 
     //   const mailOptions = {
     //     from: "leapsailafrica@gmail.com",
@@ -84,10 +88,6 @@ const sendOTP = async (req, res, next) => {
     //       console.log(info);
     //     }
     //   });
-
-    //   const { email, _id } = data._doc;
-
-    //   res.status(200).json({ id: _id, email, token });
   } catch (error) {
     next(error);
   }
