@@ -34,11 +34,15 @@ const sendOTP = async (req, res, next) => {
     const check = await User.findOne({ email: req.body.email });
 
     if (check && !check.dhid) {
-      res.send("uncomplete profile");
-    } else if (check.dhid) {
-      res.send("user already exist");
-    } else if (!check) {
-      res.send("user created.");
+      return res.send("uncomplete profile");
+    }
+
+    if (check.dhid) {
+      return res.send("user already exist");
+    }
+
+    if (!check) {
+      return res.send("user created.");
     }
 
     //   const user = new User(req.body);
