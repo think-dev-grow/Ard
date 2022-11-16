@@ -37,11 +37,11 @@ const sendOTP = async (req, res, next) => {
       return res.send("user created.");
     }
 
-    if (check && !check.dhid) {
+    if (check) {
       return res.send("uncomplete profile");
     }
 
-    if (check.dhid) {
+    if (check) {
       return res.send("user already exist");
     }
 
