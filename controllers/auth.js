@@ -103,9 +103,9 @@ const verifyOTP = async (req, res, next) => {
     const code = req.body.code;
 
     if (req.user.et === code) {
-      res.status(200).json({ success: true, msg: "Token valid" });
+      return res.status(200).json({ success: true, msg: "verification okay" });
     } else {
-      next(handleError(404, "Wrong Token"));
+      next(handleError(500, "incorrect token"));
     }
   } catch (error) {
     next(error);
