@@ -142,7 +142,7 @@ const verifyOTP = async (req, res, next) => {
     const token = req.params.token;
 
     jwt.verify(token, process.env.JWT, (err, user) => {
-      if (err) return res.send("this token is now invalid");
+      if (err) return res.send("Token expired");
 
       value = user;
     });
@@ -150,7 +150,7 @@ const verifyOTP = async (req, res, next) => {
     if (value.et === code) {
       return res.status(200).json({ success: true, msg: "verification okay" });
     } else {
-      next(handleError(500, "incorrect token"));
+      next(handleError(500, "incorrect code"));
     }
   } catch (error) {
     next(error);
