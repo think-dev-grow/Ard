@@ -59,9 +59,9 @@ const sendOTP = async (req, res, next) => {
           ],
           subject: "Test Email",
           htmlbody: `<div style="text-align: center;">
-        <img src="./img/logo.svg" alt="" class="img-fluid" style="padding: 30px 0px;">
+        <img src="https://ibb.co/CBWz5js" alt="" class="img-fluid" style="padding: 30px 0px;">
         <hr>
-        <img src="./img/email-avi.svg" alt="" class="img-fluid">
+        <img src="https://ibb.co/S5wVMWn" alt="" class="img-fluid">
         <h6 style="color: #041D05; font-size: 18px; font-weight: 500; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Please use the OTP code below to complete your account setup:</h6>
         <p style="color: #041D05; font-size: 58px; font-weight: 700; line-height: 76px; font-family: 'Ubuntu'; margin-top: 20px;">${value}</p>
         <h5 style="color: #041D05; font-size: 17px; font-weight: 400; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Or click the below link to verify your email address.</h5>
@@ -109,11 +109,11 @@ const sendOTP = async (req, res, next) => {
               },
             },
           ],
-          subject: "Test Email",
+          subject: "Email verication",
           htmlbody: `<div style="text-align: center;">
-        <img src="./img/logo.svg" alt="" class="img-fluid" style="padding: 30px 0px;">
+        <img src="https://ibb.co/CBWz5js" alt="" class="img-fluid" style="padding: 30px 0px;">
         <hr>
-        <img src="./img/email-avi.svg" alt="" class="img-fluid">
+        <img src="https://ibb.co/S5wVMWn" alt="" class="img-fluid">
         <h6 style="color: #041D05; font-size: 18px; font-weight: 500; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Please use the OTP code below to complete your account setup:</h6>
         <p style="color: #041D05; font-size: 58px; font-weight: 700; line-height: 76px; font-family: 'Ubuntu'; margin-top: 20px;">${value}</p>
         <h5 style="color: #041D05; font-size: 17px; font-weight: 400; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Or click the below link to verify your email address.</h5>
@@ -195,4 +195,24 @@ const wrongEmail = async (req, res, next) => {
   }
 };
 
-module.exports = { sendOTP, verifyOTP, completeProfile, wrongEmail };
+const securityQusetion = async (req, res, next) => {
+  try {
+    const sq = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { securityQusetion: req.body },
+      { new: true }
+    );
+
+    res.status(200).json(sq);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  sendOTP,
+  verifyOTP,
+  completeProfile,
+  wrongEmail,
+  securityQusetion,
+};
