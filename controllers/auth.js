@@ -54,7 +54,21 @@ const sendOTP = async (req, res, next) => {
     if (check && !check.dhid) {
       await User.findOneAndDelete({ email: check.email });
 
-      res.send("ready for new command");
+      const user = new User(req.body);
+      let value = randomize("0", 7);
+
+      const data = await user.save();
+
+      const payload = {
+        id: data._id,
+        et: value,
+      };
+
+      const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
+
+      const { email, _id } = data._doc;
+
+      res.status(200).json({ id: _id, email, token });
     }
 
     if (check) {
