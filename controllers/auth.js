@@ -51,7 +51,7 @@ const sendOTP = async (req, res, next) => {
       res.status(200).json({ id: _id, email, token });
     }
 
-    if (check) {
+    if (check && !check.dhid) {
       return res.send("uncomplete profile");
     }
 
