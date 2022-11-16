@@ -57,7 +57,7 @@ const sendOTP = async (req, res, next) => {
               },
             },
           ],
-          subject: "Test Email",
+          subject: "Email verifaction",
           htmlbody: `<div style="text-align: center;">
         <img src="https://ibb.co/CBWz5js" alt="" class="img-fluid" style="padding: 30px 0px;">
         <hr>
