@@ -4,7 +4,6 @@ const { Random } = require("random-js");
 const crypto = require("crypto");
 const rn = require("random-number");
 const jwt = require("jsonwebtoken");
-const jwtSecret = "1234567890";
 
 const handleError = require("../utils/error");
 
@@ -41,23 +40,23 @@ const transporter = nodemailer.createTransport({
 
 const sendOTP = async (req, res, next) => {
   try {
-    const user = new User(req.body);
-    let value = randomize("0", 7);
+    const check = await User.findOne(req.body.email);
 
-    const data = await user.save();
+    if (check && !check.dhid) {
+      let value = randomize("0", 7);
 
-    const payload = {
-      id: data._id,
-      et: value,
-    };
+      const payload = {
+        id: check._id,
+        et: value,
+      };
 
-    const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
+      const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
 
-    const mailOptions = {
-      from: "developer@leapsail.com.ng",
-      to: user.email,
-      subject: "Email verification",
-      html: `
+      const mailOptions = {
+        from: "developer@leapsail.com.ng",
+        to: check.email,
+        subject: "Email verification",
+        html: `
       <div style="text-align: center;">
     <img src="./img/logo.svg" alt="" class="img-fluid" style="padding: 30px 0px;">
     <hr>
@@ -71,28 +70,66 @@ const sendOTP = async (req, res, next) => {
     <small style="color: #041D05; font-size: 17px; font-weight: 500; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Copyright © 2022 Ardilla. All rights reserved </small>
   </div> 
       `,
-    };
+      };
 
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        console.log(err);
-        res.send(err);
-      } else {
-        console.log(info);
-        res.send(info);
-      }
-    });
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(info);
+        }
+      });
 
-    // const result = new Emailer.Email(mailOptions);
+      const { email, _id } = check._doc;
 
-    // result.send(function (info) {
-    //   console.log(" response : ", info);
-    //   res.send(info);
-    // });
+      res.status(200).json({ id: _id, email, token });
+    } else if (check.dhid) {
+      return next(handleError(400, "User alreasy exist"));
+    } else {
+      const user = new User(req.body);
+      let value = randomize("0", 7);
 
-    const { email, _id } = data._doc;
+      const data = await user.save();
 
-    res.status(200).json({ id: _id, email, token });
+      const payload = {
+        id: data._id,
+        et: value,
+      };
+
+      const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
+
+      const mailOptions = {
+        from: "developer@leapsail.com.ng",
+        to: user.email,
+        subject: "Email verification",
+        html: `
+      <div style="text-align: center;">
+    <img src="./img/logo.svg" alt="" class="img-fluid" style="padding: 30px 0px;">
+    <hr>
+    <img src="./img/email-avi.svg" alt="" class="img-fluid">
+    <h6 style="color: #041D05; font-size: 18px; font-weight: 500; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Please use the OTP code below to complete your account setup:</h6>
+    <p style="color: #041D05; font-size: 58px; font-weight: 700; line-height: 76px; font-family: 'Ubuntu'; margin-top: 20px;">${value}</p>
+    <h5 style="color: #041D05; font-size: 17px; font-weight: 400; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Or click the below link to verify your email address.</h5>
+    <a href="https://ardilla-web.netlify.app/complete-profile">Click Here
+    </a>
+    <h3 style="color: #041D05; font-size: 19px; font-weight: 600; line-height: 26px; font-family: 'Ubuntu'; margin-top: 70px;">- The Ardilla Team</h3>
+    <small style="color: #041D05; font-size: 17px; font-weight: 500; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Copyright © 2022 Ardilla. All rights reserved </small>
+  </div> 
+      `,
+      };
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(info);
+        }
+      });
+
+      const { email, _id } = data._doc;
+
+      res.status(200).json({ id: _id, email, token });
+    }
   } catch (error) {
     next(error);
   }
