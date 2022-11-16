@@ -55,7 +55,7 @@ const sendOTP = async (req, res, next) => {
       const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
 
       const mailOptions = {
-        from: "developer@leapsail.com.ng",
+        from: "leapsailafrica@gmail.com",
         to: check.email,
         subject: "Email verification",
         html: `
@@ -99,7 +99,7 @@ const sendOTP = async (req, res, next) => {
       const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
 
       const mailOptions = {
-        from: "developer@leapsail.com.ng",
+        from: "leapsailafrica@gmail.com",
         to: user.email,
         subject: "Email verification",
         html: `
