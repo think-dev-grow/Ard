@@ -45,7 +45,7 @@ const sendOTP = async (req, res, next) => {
     if (check && check.dhid) {
       return next(handleError(400, "User alreasy exist"));
     } else if (check && !check.dhid) {
-      let value = randomize("0", 7);
+      let value = random.integer(1000000, 9999999);
 
       const payload = {
         id: check._id,
