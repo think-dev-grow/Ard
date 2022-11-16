@@ -101,12 +101,22 @@ const sendOTP = async (req, res, next) => {
 const verifyOTP = async (req, res, next) => {
   try {
     const code = req.body.code;
+    let value;
+    const token = req.params.token;
 
-    if (req.user.et === code) {
-      return res.status(200).json({ success: true, msg: "verification okay" });
-    } else {
-      next(handleError(500, "incorrect token"));
-    }
+    jwt.verify(token, process.env.JWT, (err, user) => {
+      if (err) return res.send("this token is now invalid");
+
+      value = user;
+    });
+
+    res.send(value);
+
+    // if (req.user.et === code) {
+    //   return res.status(200).json({ success: true, msg: "verification okay" });
+    // } else {
+    //   next(handleError(500, "incorrect token"));
+    // }
   } catch (error) {
     next(error);
   }
