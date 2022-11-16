@@ -68,7 +68,9 @@ const sendOTP = async (req, res, next) => {
 
       const { email, _id } = data._doc;
 
-      res.status(200).json({ id: _id, email, token });
+      res
+        .status(200)
+        .json({ id: _id, email, token, msg: "uncomplete Profile" });
     }
 
     if (check) {
