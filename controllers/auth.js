@@ -184,4 +184,13 @@ const completeProfile = async (req, res, next) => {
   }
 };
 
-module.exports = { sendOTP, verifyOTP, completeProfile };
+const wrongEmail = async (req, res, next) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json({ success: true, msg: "email removed from DB" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { sendOTP, verifyOTP, completeProfile, wrongEmail };
