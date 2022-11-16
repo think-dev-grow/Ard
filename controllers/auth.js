@@ -73,7 +73,7 @@ const sendOTP = async (req, res, next) => {
         .json({ id: _id, email, token, msg: "uncomplete Profile" });
     }
 
-    if (check) {
+    if (check && check.dhid) {
       return res.send("user already exist");
     }
 
