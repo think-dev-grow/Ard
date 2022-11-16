@@ -42,7 +42,9 @@ const sendOTP = async (req, res, next) => {
   try {
     const check = await User.findOne(req.body.email);
 
-    if (check && !check.dhid) {
+    if (check && check.dhid) {
+      return next(handleError(400, "User alreasy exist"));
+    } else if (check && !check.dhid) {
       let value = randomize("0", 7);
 
       const payload = {
@@ -83,8 +85,6 @@ const sendOTP = async (req, res, next) => {
       const { email, _id } = check._doc;
 
       res.status(200).json({ id: _id, email, token });
-    } else if (check.dhid) {
-      return next(handleError(400, "User alreasy exist"));
     } else {
       const user = new User(req.body);
       let value = randomize("0", 7);
