@@ -40,7 +40,7 @@ const transporter = nodemailer.createTransport({
 
 const sendOTP = async (req, res, next) => {
   try {
-    const check = await User.findOne(req.body.email);
+    const check = await User.findOne({ email: req.body.email });
 
     if (check && check.dhid) {
       return next(handleError(400, "User alreasy exist"));
