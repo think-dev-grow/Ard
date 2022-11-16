@@ -51,7 +51,7 @@ const sendOTP = async (req, res, next) => {
       et: value,
     };
 
-    const token = jwt.sign(payload, process.env.JWT, { expiresIn: "10m" });
+    const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
 
     const mailOptions = {
       from: "developer@leapsail.com.ng",
