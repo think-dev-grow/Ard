@@ -52,7 +52,9 @@ const sendOTP = async (req, res, next) => {
     }
 
     if (check && !check.dhid) {
-      return res.send("uncomplete profile");
+      await User.findOneAndDelete({ email: check.email });
+
+      res.send("ready for new command");
     }
 
     if (check) {
