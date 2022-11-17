@@ -254,7 +254,9 @@ const login = async (req, res, next) => {
 
     const { password, ...others } = user._doc;
 
-    res.status(200).json({ ui: others, token });
+    res
+      .status(200)
+      .json({ success: true, msg: "Login successfull", ui: others, token });
   } catch (error) {
     console.log(error);
     next(handleError(500, "Oops, something went wrong"));
