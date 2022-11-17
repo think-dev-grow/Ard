@@ -218,9 +218,9 @@ const securityQusetion = async (req, res, next) => {
 
     if (!check) return next(handleError(404, "User does not exist."));
 
-    const { question, answer } = req.body.securityQusetion;
+    const sq = req.body.securityQusetion;
 
-    res.send(question, answer);
+    res.send(sq);
 
     // const sq = await User.findOneAndUpdate(
     //   { _id: req.params.id },
