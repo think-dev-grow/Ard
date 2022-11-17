@@ -4,6 +4,7 @@ const { Random } = require("random-js");
 const crypto = require("crypto");
 const rn = require("random-number");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const handleError = require("../utils/error");
 
@@ -23,10 +24,12 @@ const options = {
   integer: true,
 };
 
+//sendOTP API
 const sendOTP = async (req, res, next) => {
   try {
     const check = await User.findOne({ email: req.body.email });
 
+    //if there's is no user Logic
     if (!check) {
       const user = new User(req.body);
       let value = randomize("0", 7);
@@ -77,6 +80,7 @@ const sendOTP = async (req, res, next) => {
       res.status(200).json({ id: _id, email, token });
     }
 
+    //if there's an unfinished Registration
     if (check && !check.dhid) {
       await User.findOneAndDelete({ email: check.email });
 
@@ -99,7 +103,7 @@ const sendOTP = async (req, res, next) => {
           bounce_address: "NOREPLY@bounce.ardilla.africa",
           from: {
             address: "noreply@ardilla.africa",
-            name: "noreply",
+            name: "Ardilla",
           },
           to: [
             {
@@ -129,6 +133,7 @@ const sendOTP = async (req, res, next) => {
       res.status(200).json({ id: _id, email, token, msg: "stale user" });
     }
 
+    //if user has finish his registration
     if (check && check.dhid) {
       return next(handleError(400, "User already exist"));
     }
@@ -137,6 +142,7 @@ const sendOTP = async (req, res, next) => {
   }
 };
 
+//VerifyOTP API
 const verifyOTP = async (req, res, next) => {
   try {
     const code = req.body.code;
@@ -159,9 +165,13 @@ const verifyOTP = async (req, res, next) => {
   }
 };
 
+//Complete-profile API
 const completeProfile = async (req, res, next) => {
   try {
     const check = await User.findById(req.params.id);
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
 
     if (!check) {
       return next(handleError(404, "User does not exist."));
@@ -174,7 +184,7 @@ const completeProfile = async (req, res, next) => {
       )}`;
       check.dhid = crypto.randomBytes(64).toString("hex");
       check.contact = req.body.contact;
-      check.password = req.body.password;
+      check.password = hash;
       check.kodeHex = req.body.kodeHex;
 
       const verifiedUser = await check.save();
@@ -186,6 +196,7 @@ const completeProfile = async (req, res, next) => {
   }
 };
 
+//Wrong Email API
 const wrongEmail = async (req, res, next) => {
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -195,6 +206,7 @@ const wrongEmail = async (req, res, next) => {
   }
 };
 
+//Security Question API
 const securityQusetion = async (req, res, next) => {
   try {
     const sq = await User.findOneAndUpdate(
@@ -209,10 +221,34 @@ const securityQusetion = async (req, res, next) => {
   }
 };
 
+//login API
+const login = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) return next(handleError(404, "User does not exist."));
+
+    if (!user.dhid) return next(handleError(404, "This email is Invalid."));
+
+    const confirmPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!confirmPassword) return next(handleError(400, "Password incorrect."));
+
+    const { password, ...others } = user._doc;
+
+    res.status(200).json(others);
+  } catch (error) {
+    console.log(error);
+    next(handleError(500, "Oops, something went wrong"));
+  }
+};
+
 module.exports = {
   sendOTP,
   verifyOTP,
   completeProfile,
   wrongEmail,
   securityQusetion,
+  login,
 };
