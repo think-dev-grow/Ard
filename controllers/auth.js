@@ -252,6 +252,13 @@ const login = async (req, res, next) => {
 
     const token = jwt.sign(payload, process.env.JWT, { expiresIn: "1hr" });
 
+    res.cookie(String(user._id), token, {
+      path: "/",
+      expires: new Date(Date.now() + 1000 * 30),
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
     const { password, ...others } = user._doc;
 
     res
