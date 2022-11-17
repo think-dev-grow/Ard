@@ -250,7 +250,7 @@ const login = async (req, res, next) => {
       id: user._id,
     };
 
-    const token = jwt.sign(payload, process.env.JWT, { expiresIn: "1hr" });
+    const token = jwt.sign(payload, process.env.JWT, { expiresIn: "30s" });
 
     res.cookie(String(user._id), token, {
       path: "/",
