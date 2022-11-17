@@ -24,9 +24,9 @@ const sendMail = (to, value) => {
       ],
       subject: "Email verifaction",
       htmlbody: `<div style="text-align: center;">
-        <img src="https://estaticos.muyinteresante.es/uploads/images/gallery/5f33dd795bafe8aec796587b/curiosidades-ardillas.jpg" alt="" class="img-fluid" style="padding: 30px 0px;">
+        <img src="https://i.postimg.cc/wBWk35pJ/Logo-copy.png" alt="" class="img-fluid" style="padding: 30px 0px;">
         <hr>
-        <img src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes.png" alt="" class="img-fluid">
+        <img src="https://i.postimg.cc/rmtXJNqX/illustration.png " alt="" class="img-fluid">
         <h6 style="color: #041D05; font-size: 18px; font-weight: 500; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Please use the OTP code below to complete your account setup:</h6>
         <p style="color: #041D05; font-size: 58px; font-weight: 700; line-height: 76px; font-family: 'Ubuntu'; margin-top: 20px;">${value}</p>
         
