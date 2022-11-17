@@ -25,6 +25,6 @@ router.put("/security-question/:id", securityQusetion);
 
 router.post("/login", login);
 
-router.get("/user", userVerification);
+router.get("/user", userVerification, getUser);
 
 module.exports = router;

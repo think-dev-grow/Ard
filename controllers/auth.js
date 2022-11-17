@@ -272,22 +272,19 @@ const login = async (req, res, next) => {
 
 const userVerification = async (req, res, next) => {
   try {
-    // const headers = req.headers["authorization"];
-    // const token = headers.split(" ")[1];
-
     const cookies = req.headers.cookie;
     const token = cookies.split("=")[1];
 
     res.send(token);
 
-    // if (!token) return next(handleError(404, "Unauthorize request"));
+    if (!token) return next(handleError(404, "Unauthorize request"));
 
-    // jwt.verify(String(token), process.env.JWT, (err, user) => {
-    //   if (err) return next(handleError(404, "Invalid Token"));
+    jwt.verify(String(token), process.env.JWT, (err, user) => {
+      if (err) return next(handleError(404, "Invalid Token"));
 
-    //   req.id = user.id;
-    // });
-    // next();
+      req.id = user.id;
+    });
+    next();
   } catch (error) {
     next(error);
   }
