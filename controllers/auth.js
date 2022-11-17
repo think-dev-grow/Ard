@@ -276,7 +276,7 @@ const userVerification = async (req, res, next) => {
     // const token = headers.split(" ")[1];
 
     const cookies = req.headers.cookie;
-    console.log(cookies);
+    res.send(cookies);
 
     // if (!token) return next(handleError(404, "Unauthorize request"));
 
