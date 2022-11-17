@@ -246,9 +246,29 @@ const login = async (req, res, next) => {
     );
     if (!confirmPassword) return next(handleError(400, "Password incorrect."));
 
+    const payload = {
+      id: user._id,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT, { expiresIn: "1hr" });
+
     const { password, ...others } = user._doc;
 
-    res.status(200).json(others);
+    res.status(200).json({ ui: others, token });
+  } catch (error) {
+    console.log(error);
+    next(handleError(500, "Oops, something went wrong"));
+  }
+};
+
+//Forgot-Password API
+const forgetPassword = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) return next(handleError(404, "This user does not exist."));
+
+    //send mail that take them to securityQuestion
   } catch (error) {
     console.log(error);
     next(handleError(500, "Oops, something went wrong"));
