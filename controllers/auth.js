@@ -263,6 +263,15 @@ const login = async (req, res, next) => {
   }
 };
 
+const userVerification = async (req, res, next) => {
+  try {
+    const headers = req.headers["authorization"];
+    res.send(headers);
+  } catch (error) {
+    next(error);
+  }
+};
+
 //Forgot-Password API
 const forgetPassword = async (req, res, next) => {
   try {
@@ -284,4 +293,5 @@ module.exports = {
   wrongEmail,
   securityQusetion,
   login,
+  userVerification,
 };
