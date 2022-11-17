@@ -317,4 +317,5 @@ module.exports = {
   securityQusetion,
   login,
   userVerification,
+  getUser,
 };
