@@ -216,7 +216,7 @@ const securityQusetion = async (req, res, next) => {
   try {
     const check = await User.findById(req.params.id);
 
-    const { question, answer } = req.body;
+    const { question, answer } = req.body.securityQusetion;
 
     if (!check) return next(handleError(404, "User does not exist."));
 
