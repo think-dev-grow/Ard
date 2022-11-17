@@ -8,6 +8,7 @@ const {
   securityQusetion,
   login,
   userVerification,
+  getUser,
 } = require("../controllers/auth");
 
 const router = express.Router();
@@ -24,6 +25,6 @@ router.put("/security-question/:id", securityQusetion);
 
 router.post("/login", login);
 
-router.get("/user", userVerification);
+router.get("/user", userVerification, getUser);
 
 module.exports = router;
