@@ -216,15 +216,17 @@ const securityQusetion = async (req, res, next) => {
   try {
     const check = await User.findById(req.params.id);
 
-    const { question, answer } = req.body.securityQusetion;
-
     if (!check) return next(handleError(404, "User does not exist."));
 
-    const sq = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      { securityQusetion: { question, answer } },
-      { new: true }
-    );
+    const { question, answer } = req.body.securityQusetion;
+
+    res.send(question, answer);
+
+    // const sq = await User.findOneAndUpdate(
+    //   { _id: req.params.id },
+    //   { securityQusetion: { question, answer } },
+    //   { new: true }
+    // );
 
     res.status(200).json(sq);
   } catch (error) {
