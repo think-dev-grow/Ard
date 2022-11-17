@@ -50,7 +50,7 @@ const sendOTP = async (req, res, next) => {
           bounce_address: "NOREPLY@bounce.ardilla.africa",
           from: {
             address: "noreply@ardilla.africa",
-            name: "noreply",
+            name: "Ardilla",
           },
           to: [
             {
