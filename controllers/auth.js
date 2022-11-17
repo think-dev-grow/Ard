@@ -159,7 +159,7 @@ const securityQusetion = async (req, res, next) => {
       { new: true }
     );
 
-    res.status(200).json(sqUpdaate);
+    res.status(200).json({ success: true, msg: "Your secret is safe with us" });
   } catch (error) {
     next(error);
   }
