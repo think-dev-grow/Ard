@@ -273,8 +273,23 @@ const userVerification = async (req, res, next) => {
     jwt.verify(String(token), process.env.JWT, (err, user) => {
       if (err) return next(handleError(404, "Invalid Token"));
 
-      res.send(user);
+      req.id = user.id;
     });
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getUser = async (req, res, next) => {
+  try {
+    const userId = req.id;
+
+    const user = await User.findById(userId, "-password");
+
+    if (!user) return next(handleError(404, "User not found"));
+
+    res.status(200).json({ success: true, user });
   } catch (error) {
     next(error);
   }
