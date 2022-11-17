@@ -220,15 +220,13 @@ const securityQusetion = async (req, res, next) => {
 
     const sq = req.body.securityQusetion;
 
-    res.send(sq);
+    const sqUpdaate = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { securityQusetion: sq },
+      { new: true }
+    );
 
-    // const sq = await User.findOneAndUpdate(
-    //   { _id: req.params.id },
-    //   { securityQusetion: { question, answer } },
-    //   { new: true }
-    // );
-
-    res.status(200).json(sq);
+    res.status(200).json(sqUpdaate);
   } catch (error) {
     next(error);
   }
