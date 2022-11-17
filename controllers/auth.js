@@ -149,7 +149,7 @@ const verifyOTP = async (req, res, next) => {
     let value;
     const token = req.params.token;
 
-    jwt.verify(token, process.env.JWT, (err, user) => {
+    jwt.verify(String(token), process.env.JWT, (err, user) => {
       if (err) return res.send("Token expired");
 
       value = user;
@@ -266,7 +266,15 @@ const login = async (req, res, next) => {
 const userVerification = async (req, res, next) => {
   try {
     const headers = req.headers["authorization"];
-    res.send(headers);
+    const token = headers.split(" ")(1);
+
+    if (!token) return next(handleError(404, "Unauthorize request"));
+
+    jwt.verify(String(token), process.env.JWT, (err, user) => {
+      if (err) return next(handleError(404, "Invalid Token"));
+
+      res.send(user);
+    });
   } catch (error) {
     next(error);
   }
