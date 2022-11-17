@@ -266,7 +266,7 @@ const login = async (req, res, next) => {
 const userVerification = async (req, res, next) => {
   try {
     const headers = req.headers["authorization"];
-    const token = headers.split(" ")(1);
+    const token = headers.split(" ")[1];
 
     if (!token) return next(handleError(404, "Unauthorize request"));
 
