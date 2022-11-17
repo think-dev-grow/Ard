@@ -7,6 +7,7 @@ const {
   wrongEmail,
   securityQusetion,
   login,
+  userVerification,
 } = require("../controllers/auth");
 
 const router = express.Router();
@@ -22,5 +23,7 @@ router.delete("/wrong-email/:id", wrongEmail);
 router.put("/security-question/:id", securityQusetion);
 
 router.post("/login", login);
+
+router.get("/user", userVerification);
 
 module.exports = router;
