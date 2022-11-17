@@ -263,7 +263,7 @@ const login = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ success: true, msg: "Login successfull", ui: others, token });
+      .json({ success: true, msg: "Login successfull wi", ui: others, token });
   } catch (error) {
     console.log(error);
     next(handleError(500, "Oops, something went wrong"));
