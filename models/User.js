@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, default: "" },
   dhid: { type: String, default: "" },
   uid: { type: String, default: "" },
-  securityQuestion: { type: Object },
+  securityQuestion: { type: Object, default: {} },
 });
 
 module.exports = mongoose.model("User", UserSchema);
