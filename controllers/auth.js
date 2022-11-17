@@ -199,7 +199,12 @@ const completeProfile = async (req, res, next) => {
 //Wrong Email API
 const wrongEmail = async (req, res, next) => {
   try {
+    const check = await User.findById(req.params.id);
+
+    if (!check) return next(handleError(404, "User does not exist."));
+
     await User.findByIdAndDelete(req.params.id);
+
     res.status(200).json({ success: true, msg: "email removed from DB" });
   } catch (error) {
     next(error);
@@ -209,6 +214,10 @@ const wrongEmail = async (req, res, next) => {
 //Security Question API
 const securityQusetion = async (req, res, next) => {
   try {
+    const check = await User.findById(req.params.id);
+
+    if (!check) return next(handleError(404, "User does not exist."));
+
     const sq = await User.findOneAndUpdate(
       { _id: req.params.id },
       { securityQusetion: req.body },
