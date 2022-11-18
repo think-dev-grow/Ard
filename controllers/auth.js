@@ -36,7 +36,7 @@ const sendOTP = async (req, res, next) => {
 
       const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
 
-      sendMail(data.email, value);
+      sendVerificationMail(data.email, value);
 
       const { email, _id } = data._doc;
 
@@ -59,7 +59,7 @@ const sendOTP = async (req, res, next) => {
 
       const token = jwt.sign(payload, process.env.JWT, { expiresIn: "3m" });
 
-      sendMail(data.email, value);
+      sendVerificationMail(data.email, value);
 
       const { email, _id } = data._doc;
 
