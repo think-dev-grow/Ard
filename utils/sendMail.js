@@ -92,8 +92,8 @@ const resetPassword = (to, name, username, token) => {
               <p style="color: #253745; font-size: 14px; margin: 0; margin-bottom: 30px; line-height: 22px;">
                 You have requested for a password reset for your
                 <strong>Ardilla</strong>
-                account with the username
-                <strong>${username}.</strong>
+                account with the KodeHex
+                <strong><${username}/>.</strong>
               </p>
               <p style="color: #253745; font-size: 14px; margin: 0; line-height: 22px;">
                 Click on the below link to reset your password.
