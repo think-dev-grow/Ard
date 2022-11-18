@@ -245,28 +245,33 @@ const verifyToken = async (req, res, next) => {
 };
 
 const resetPassword = async (req, res, next) => {
-  const { id } = req.params;
+  try {
+    const id = req.params.id;
 
-  const user = await User.findOne({ _id: id });
-  if (!user) return next(handleError(404, "User does not exist."));
+    const user = await User.findOne({ _id: id });
+    if (!user) return next(handleError(404, "User does not exist."));
 
-  res.send(user);
+    res.send(user);
 
-  // try {
-  //   const salt = bcrypt.genSaltSync(10);
-  //   const hash = bcrypt.hashSync(req.body.password, salt);
-  //   const userData = await User.findByIdAndUpdate(
-  //     { _id: id },
-  //     { $set: { password: hash } }
-  //   );
-  //   res.status(200).json({
-  //     success: true,
-  //     msg: `${userData.kodeHex} password has been reset`,
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-  //   next(handleError(500, "Oops, something went wrong"));
-  // }
+    // try {
+    //   const salt = bcrypt.genSaltSync(10);
+    //   const hash = bcrypt.hashSync(req.body.password, salt);
+    //   const userData = await User.findByIdAndUpdate(
+    //     { _id: id },
+    //     { $set: { password: hash } }
+    //   );
+    //   res.status(200).json({
+    //     success: true,
+    //     msg: `${userData.kodeHex} password has been reset`,
+    //   });
+    // } catch (error) {
+    //   console.log(error);
+    //   next(handleError(500, "Oops, something went wrong"));
+    // }
+  } catch (error) {
+    console.log(error);
+    next(handleError(500, "Oops, something went wrong"));
+  }
 };
 
 module.exports = {
