@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const handleError = require("../utils/error");
-const sendMail = require("../utils/sendMail");
+const { sendVerificationMail, resetPassword } = require("../utils/sendMail");
 
 const random = new Random();
 
@@ -185,13 +185,6 @@ const login = async (req, res, next) => {
 
     const token = jwt.sign(payload, process.env.JWT, { expiresIn: "30s" });
 
-    res.cookie(String(user._id), token, {
-      path: "/",
-      expires: new Date(Date.now() + 1000 * 30),
-      httpOnly: true,
-      sameSite: "lax",
-    });
-
     const { password, ...others } = user._doc;
 
     res
@@ -203,51 +196,46 @@ const login = async (req, res, next) => {
   }
 };
 
-const userVerification = async (req, res, next) => {
-  try {
-    const cookies = req.headers.cookie;
-    const token = cookies.split("=")[1];
-
-    res.send(token);
-
-    if (!token) return next(handleError(404, "Unauthorize request"));
-
-    jwt.verify(String(token), process.env.JWT, (err, user) => {
-      if (err) return next(handleError(404, "Invalid Token"));
-
-      req.id = user.id;
-    });
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
-const getUser = async (req, res, next) => {
-  try {
-    const userId = req.id;
-
-    const user = await User.findById(userId, "-password");
-
-    if (!user) return next(handleError(404, "User not found"));
-
-    res.status(200).json({ success: true, user });
-  } catch (error) {
-    next(error);
-  }
-};
-
 //Forgot-Password API
-const forgetPassword = async (req, res, next) => {
+const forgotPassword = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) return next(handleError(404, "This user does not exist."));
 
+    const payload = {
+      id: user._id,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT, { expiresIn: "5m" });
+
     //send mail that take them to securityQuestion
+
+    resetPassword(user.email, user.firstname, user.kodeHex, token);
+
+    res.status(200).json({
+      success: true,
+      msg: `Hey ${user.kodeHex} Check your email and reset password`,
+      token,
+    });
   } catch (error) {
     console.log(error);
     next(handleError(500, "Oops, something went wrong"));
+  }
+};
+
+const verifyToken = async (req, res, next) => {
+  try {
+    const token = req.params.token;
+
+    jwt.verify(String(token), process.env.JWT, (err, user) => {
+      if (err) return res.send("Token expired");
+
+      res.send(user);
+    });
+  } catch (error) {
+    console.log(error);
+    next(handleError(500, "Connection Error "));
   }
 };
 
@@ -258,6 +246,6 @@ module.exports = {
   wrongEmail,
   securityQusetion,
   login,
-  userVerification,
-  getUser,
+  forgotPassword,
+  verifyToken,
 };
