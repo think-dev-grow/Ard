@@ -24,16 +24,29 @@ const sendVerificationMail = (to, value) => {
         },
       ],
       subject: "Email verifaction",
-      htmlbody: `<div style="text-align: center;">
-        <img src="https://i.postimg.cc/wBWk35pJ/Logo-copy.png" alt="" class="img-fluid" style="padding: 30px 0px;">
-        <hr>
-        <img src="https://i.postimg.cc/rmtXJNqX/illustration.png " alt="" class="img-fluid">
-        <h6 style="color: #041D05; font-size: 18px; font-weight: 500; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Please use the OTP code below to complete your account setup:</h6>
-        <p style="color: #041D05; font-size: 58px; font-weight: 700; line-height: 76px; font-family: 'Ubuntu'; margin-top: 20px;">${value}</p>
-        
-        <h3 style="color: #041D05; font-size: 19px; font-weight: 600; line-height: 26px; font-family: 'Ubuntu'; margin-top: 70px;">- The Ardilla Team</h3>
-        <small style="color: #041D05; font-size: 17px; font-weight: 500; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Copyright © 2022 Ardilla. All rights reserved </small>
-      </div>`,
+      htmlbody: `<table
+      cellSpacing="0"
+      cellPadding="0"
+      style="background-color: #F2F2F2; border: 1px solid #eee; width: 100%;"
+    >
+      <tbody>
+        <tr>
+          <td>
+                <div style="text-align: center;">
+                  <img src="https://i.postimg.cc/wBWk35pJ/Logo-copy.png" alt="" class="img-fluid" style="padding: 30px 0px;">
+                  <hr>
+                  <img src="https://i.postimg.cc/rmtXJNqX/illustration.png " alt="" class="img-fluid">
+                  <h6 style="color: #041D05; font-size: 18px; font-weight: 500; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Please use the OTP code below to complete your account setup:</h6>
+                  <p style="color: #041D05; font-size: 58px; font-weight: 700; line-height: 76px; font-family: 'Ubuntu'; margin-top: 20px;">${value}</p>
+                  
+                  <h3 style="color: #041D05; font-size: 19px; font-weight: 600; line-height: 26px; font-family: 'Ubuntu'; margin-top: 70px;">- The Ardilla Team</h3>
+                  <small style="color: #041D05; font-size: 17px; font-weight: 500; line-height: 26px; font-family: 'Ubuntu'; margin-top: 20px;">Copyright © 2022 Ardilla. All rights reserved </small>
+                </div>
+         </td>
+        </tr>
+      </tbody>
+    </table>
+      `,
     })
     .then((resp) => console.log("success", resp))
     .catch((error) => console.log("error", error));

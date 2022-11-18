@@ -236,11 +236,34 @@ const verifyToken = async (req, res, next) => {
     jwt.verify(String(token), process.env.JWT, (err, user) => {
       if (err) return res.send("Token expired");
 
-      res.send(user);
+      res.redirect(`https://ardilla-web.netlify.app/set-password/${user.id}`);
     });
   } catch (error) {
     console.log(error);
     next(handleError(500, "Connection Error "));
+  }
+};
+
+const resetPassword = async (req, res, next) => {
+  const id = req.id;
+
+  const user = await User.findOne({ _id: id });
+  if (!user) return next(handleError(404, "User does not exist."));
+
+  try {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
+    const userData = await User.findByIdAndUpdate(
+      { _id: id },
+      { $set: { password: hash } }
+    );
+    res.status(200).json({
+      success: true,
+      msg: `${userData.kodeHex} password has been reset`,
+    });
+  } catch (error) {
+    console.log(error);
+    next(handleError(500, "Oops, something went wrong"));
   }
 };
 
@@ -253,4 +276,5 @@ module.exports = {
   login,
   forgotPassword,
   verifyToken,
+  resetPassword,
 };
