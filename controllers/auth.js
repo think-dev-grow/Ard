@@ -122,7 +122,9 @@ const completeProfile = async (req, res, next) => {
 
       const verifiedUser = await check.save();
 
-      res.status(200).json(verifiedUser);
+      res
+        .status(200)
+        .json(`Hey ${verifiedUser.kodeHex},Registration completed.`);
     }
   } catch (error) {
     next(error);
@@ -153,13 +155,16 @@ const securityQusetion = async (req, res, next) => {
 
     const sq = req.body.securityQusetion;
 
-    const sqUpdaate = await User.findOneAndUpdate(
+    const sqUpdate = await User.findOneAndUpdate(
       { _id: req.params.id },
       { securityQusetion: sq },
       { new: true }
     );
 
-    res.status(200).json({ success: true, msg: "Your secret is safe with us" });
+    res.status(200).json({
+      success: true,
+      msg: `Dont worry ${sqUpdate.kodeHex} , Your secret is safe with us`,
+    });
   } catch (error) {
     next(error);
   }
@@ -189,7 +194,7 @@ const login = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ success: true, msg: "Login successfull wi", ui: others, token });
+      .json({ success: true, msg: "Login successfull", ui: others, token });
   } catch (error) {
     console.log(error);
     next(handleError(500, "Oops, something went wrong"));
