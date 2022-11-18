@@ -245,7 +245,7 @@ const verifyToken = async (req, res, next) => {
 };
 
 const resetPassword = async (req, res, next) => {
-  const id = req.id;
+  const { id } = req.params;
 
   const user = await User.findOne({ _id: id });
   if (!user) return next(handleError(404, "User does not exist."));
